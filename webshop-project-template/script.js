@@ -49,8 +49,24 @@ for( var product of state.products){
     </div>
     `;}
 
-
 document.getElementById('product-list-component').innerHTML = productsHTML;
 }
-
 window.onload = renderProducts;
+
+//ACTION
+document.getElementById('create-product').onsubmit = function(event){
+    event.preventDefault()
+    var price =Number((event.target.elements.price.value));
+    var name =(event.target.elements.name.value);
+    var stock =(event.target.elements.isInStock.checked);
+
+//STATE CHANGE
+state.products.push({
+    name : name,
+    price: price,
+    isInStock:stock,
+});
+//RENDER
+    renderProducts();
+
+}
