@@ -23,33 +23,35 @@ var state = {
             id: uuidv4(),
             name: 'Teszt termék 3',
             price: 6500,
-            isInStock: false,
+            isInStock: true,
         }
     ]
+
 }
 
 
+function productes() {
 
-function renderFunction() {
-    productsHTML = '';
+    var produ = '';
 
-    for (prod of state.products) {
+    for (var prod of state.products) {
+        produ += `<div class = "card p-5 ${prod.isInStock ? '' : 'bg-danger'}">
+             <p>${prod.name}</p><br>
+              <p>${prod.price}</p>
+         <button class ="btn btn-danger float-right delete-product"
+          data-productid="${prod.id}">Törlés</button>
+            </div>`
+    };
 
-        productsHTML += `<div class = "card p-5 m-2">
-    ${prod.name},
-    ${prod.price},
-    <button class ="btn btn-danger delete-products" data-productsid="${prod.id}">Törlés</button>
+    document.getElementById('product-list-component').innerHTML = produ;
 
-    </div>`
-    }
 
-    document.getElementById("product-list-component").innerHTML = productsHTML
+    /*-------------*/
 
-    for (var deleteBtn of document.querySelectorAll('.delete-products')) {
+    for (var deleteBtn of document.querySelectorAll('.delete-product')) {
 
         deleteBtn.onclick = function (event) {
-
-            var id = event.target.dataset.productsid;
+            var id = event.target.dataset.productid;
             var foundIndex;
 
             for (var i = 0; i < state.products.length; i++) {
@@ -57,42 +59,33 @@ function renderFunction() {
                 if (state.products[i].id === id) { foundIndex = i; break; }
             }
 
+
             state.products.splice(foundIndex, 1);
 
-            renderFunction();
+            productes();
         }
-
     }
+
 
 }
 
-document.getElementById("create-product").onsubmit = function (event) {
-
+document.getElementById('create-product').onsubmit = function (event) {
     event.preventDefault();
     var name = event.target.elements.name.value;
-    var pice = event.target.elements.price.value;
+
+
+    var price = Number(event.target.elements.price.value);
     var stock = event.target.elements.isInStock.checked;
 
 
     state.products.push({
         id: uuidv4(),
         name: name,
-        price: pice,
+        price: price,
         isInStock: stock,
-    }
-    )
-    renderFunction()
-};
-
-
-
-
-
-window.onload = renderFunction;
-
-
-
-
+    });
+    productes()
+}
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -100,3 +93,8 @@ function uuidv4() {
         return v.toString(16);
     });
 }
+
+
+
+
+window.onload = productes()
