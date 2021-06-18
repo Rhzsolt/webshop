@@ -5,93 +5,90 @@
 
 
 var state = {
-
   product: [
-    { id:uuidv4(),
-      name:'kenyer',
-      price: 450,
-      isInStock: true,
-    },
 
-    { id:uuidv4(),
-      name: 'tej',
-      price: 350,
-      isInStock: true,
+    {
+      id: uuidv4(),
+      name: 'Bogi',
+      age: 18,
+      atHome: true,
     },
+    {
+      id: uuidv4(),
+      name: 'Zsolt',
+      age: 53,
+      atHome: true,
+    },
+    {
+      id: uuidv4(),
+      name: 'Marta',
+      age: 53,
+      atHome: true,
+    }
 
-    { id:uuidv4(),
-      name: 'vaj',
-      price: 800,
-      isInStock: true,
-    },
+
   ]
 }
 
+function Family() {
 
+  var gyujt = '';
 
-function renderProduct(){
+  for (fam of state.product) {
 
-productHTML = '';
-
-for( var prod of state.product){
-
-
-  productHTML += `<div class ='card p-5 m-2 ${prod.isInStock ? '' : 'bg-warning'}'>
-  ${prod.name},
-  ${prod.price},
- <button class ='btn btn-danger delete' data-idname='${prod.id}'>TÖRLŐ</button>
-  
-  </div>`
-}
-document.getElementById("product-list-component").innerHTML=productHTML;
-
-for( var delbtn of document.querySelectorAll('.delete')){
-
-  delbtn.onclick = function(event){
-    var id = event.target.dataset.idname;
-    var törlés;
-    for(var i =0;i<state.product.length;i++){
-
-    if( state.product[i].id === id){ törlés = i;break;}
-    }
-
-    state.product.splice(törlés,1)
-
-    renderProduct();
-
-  }
-}
+    gyujt += `<div class ="card p-5 ${fam.atHome ? '' : 'bg-warning'}">
     
+    ${fam.name}
+    ${fam.age}
+    <button class=' btn btn-danger törles' data-ides='${fam.id}'>TÖRÖLŐ</button>
+    </div>`};
+document.getElementById("product-list-component").innerHTML = gyujt;
+
+  for (delbtn of document.querySelectorAll('.törles')) {
+    
+
+    delbtn.onclick = function (event) {
+      var idek = event.target.dataset.ides;
+      var tal;
+
+      for (var i = 0; i < state.product.length; i++) {
+        if (state.product[i].id === idek) { tal = i; break; }
+      }
+      state.product.splice(tal, 1);
+
+      Family();
+
+    }
+  }
+
   
 }
-
 document.getElementById("create-product").onsubmit = function(event){
-  event.preventDefault();
+  event.preventDefault()
 
-var name =event.target.elements.name.value;
-var price= Number(event.target.elements.price.value);
-var stock=event.target.elements.isInStock.checked;
+var name = event.target.elements.name.value;
+var age =Number(event.target.elements.age.value);
+var otth = event .target.elements.atHome.checked;
 
 state.product.push({
   id:uuidv4(),
   name:name,
-  price:price,
-  isInStock:stock,
+  age:age,
+  atHome:otth,
 })
-renderProduct();
-
+Family();
 }
+
+
+
+
 
 
 
 function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
-
-
-
-
-window.onload =renderProduct();
+window.onload = Family();
