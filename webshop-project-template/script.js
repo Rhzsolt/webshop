@@ -23,7 +23,7 @@ var state ={
   {
       name:'Edami',
       price:2500,
-      isInStock:true,
+      isInStock:false,
   },
 
   {
